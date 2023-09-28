@@ -12,16 +12,32 @@ SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets"
 ]
 
-def append_data(array_data):
-    gc = gspread.authorize(ServiceAccountCredentials.from_json_keyfile_dict(credentials_info,SCOPE))    
+@st.cache_resource
+def get_google_credential():
+    gc = gspread.authorize(ServiceAccountCredentials.from_json_keyfile_dict(credentials_info,SCOPE))
     workbook = gc.open_by_key(sheetid)
     worksheet = workbook.worksheet(RESPONSE)
-    # st.write(array_data)
-    # return 'success'
+    
+    return worksheet
+
+def append_data(array_data):
     try :
+        worksheet = get_google_credential()
         worksheet.append_rows(  values=[array_data],
                             value_input_option='USER_ENTERED',
                             table_range='A:Z')
+        st.header("From Method 1")
         return 'success'
     except Exception as e:
+        try:
+            gc = gspread.authorize(ServiceAccountCredentials.from_json_keyfile_dict(credentials_info,SCOPE))
+            workbook = gc.open_by_key(sheetid)
+            worksheet = workbook.worksheet(RESPONSE)
+            worksheet.append_rows(  values=[array_data],
+                                value_input_option='USER_ENTERED',
+                                table_range='A:Z')
+            st.header("From Method 2")
+            return 'success'
+        except Exception as e:
+            return 'error'
         return 'error'

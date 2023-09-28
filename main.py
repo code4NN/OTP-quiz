@@ -210,10 +210,10 @@ if st.session_state['page'] == 0:
                                      label_visibility='hidden',
                                      disabled=DISABLED)
         if interest =='Other':
-            interest = st.text_input("Please Mention",disabled=DISABLED)
-            if not interest:
+            interest_2 = st.text_input("Please Mention",disabled=DISABLED)
+            if not interest_2:
                 incomplete_field.append("I Would Like to ...")
-            FINAL_SUBMIT.append(interest)
+            FINAL_SUBMIT.append(interest_2)
         else :
             FINAL_SUBMIT.append(interest)
 
@@ -261,17 +261,18 @@ if st.session_state['page'] == 0:
 
         
         st.divider()
+        st.header("Components of your personality")
         left,middle,right = st.columns(3)
         if 'form_submitted' in st.session_state:
-            st.header("Components of your personality")
             with left:
-                st.markdown("#### Goodness")
+                # st.markdown("#### Goodness")
+                st.markdown('<h4 style="color:#c8d11d">Goodness</h4>',unsafe_allow_html=True)
                 st.metric("",f'{goodness_component:.2%}')
             with middle:
-                st.markdown("#### Passion")
+                st.markdown("#### :red[Passion]")
                 st.metric("",f'{passion_component:.2%}')
             with right:
-                st.markdown("#### Ignorance")
+                st.markdown("#### :violet[Ignorance]")
                 st.metric("",f'{ignorance_component:.2%}')
             
             st.header("Thank You for Participating")
