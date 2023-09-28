@@ -53,18 +53,19 @@ def is_valid_gmail(email):
 
 if st.session_state['page'] == 0:
 
-    st.header(":blue[Welcome to `GPI` Test]")
+    st.header(":blue[Welcome to GPI(]Goodness :red[Passion] :violet[Ignorance] :blue[index) Self Assessment]")
     # st.caption("an image for information")
-    st.markdown(":one: Fill In Personal Details")
-    st.markdown(":two: Answer Some Questions")
-    st.markdown(":three: Evaluate Your GPI Score")
+    # st.markdown(":one: Fill In Personal Details")
+    # st.markdown(":two: Answer Some Questions")
+    # st.markdown(":three: Evaluate Your GPI Score")
 
     DISABLED = True if 'form_submitted' in st.session_state else False
 
     st.divider()
-    st.subheader(":one: Personal Details")
+    # st.subheader(":one: Personal Details")
 
     personalinfo = {'valid_input':True}
+    incomplete_field = []
     FINAL_SUBMIT = []
     
     personalinfo['name'] = st.text_input("Name",disabled=DISABLED)
@@ -72,6 +73,9 @@ if st.session_state['page'] == 0:
     if not personalinfo['name']:
         st.caption("Please Enter Name")
         personalinfo['valid_input'] = False
+        incomplete_field.append("Name")
+    st.markdown("")
+    st.markdown("")
 
     personalinfo['phone'] = st.text_input("Whatsapp Number",disabled=DISABLED)
     personalinfo['phone'] = personalinfo['phone'].strip()
@@ -79,12 +83,17 @@ if st.session_state['page'] == 0:
     if not personalinfo['phone']:
         st.caption("Please Enter Whatsapp Number without +91")
         personalinfo['valid_input'] = False
+        incomplete_field.append("Number")
+
     elif not is_valid_mobile_number(personalinfo['phone'])[0]:
         st.markdown(f":red[{is_valid_mobile_number(personalinfo['phone'])[1]}]")
         if st.checkbox("I Want to Proceed Anyway",key='valid phone'):
             personalinfo['valid_input'] = True and personalinfo['valid_input']
         else:
-            personalinfo['valid_input'] = False 
+            personalinfo['valid_input'] = False
+            incomplete_field.append("Number")
+    st.markdown("")
+    st.markdown("")
 
     personalinfo['email'] = st.text_input("Email",disabled=DISABLED)
     personalinfo['email'] = personalinfo['email'].strip()
@@ -92,19 +101,40 @@ if st.session_state['page'] == 0:
     if not personalinfo['email']:
         st.caption("Please Enter Email")
         personalinfo['valid_input'] = False
+        incomplete_field.append("Email")
     elif not is_valid_gmail(personalinfo['email']):
         st.markdown(":red[Not a Valid Email]")        
         if st.checkbox("I want to Proceed Anyway",key='valid email'):
             personalinfo['valid_input'] = personalinfo['valid_input'] and True
         else:
             personalinfo['valid_input'] = False
+            incomplete_field.append("Email")
+    st.markdown("")
+    st.markdown("")
+
+    personalinfo['degree'] = st.radio("Degree",
+                                      options=['B. Tech',
+                                               'M. Tech',
+                                               'Dual Degree',
+                                               'B. S',
+                                               'PhD',
+                                               'Staff',
+                                               'Other'],
+                                               index=0,
+                                               disabled=DISABLED,
+                                               horizontal=True)
+    FINAL_SUBMIT.append(personalinfo['degree'])
+    st.markdown("")
+    st.markdown("")
 
     personalinfo['branch'] = st.text_input("Branch",disabled=DISABLED)
     FINAL_SUBMIT.append(personalinfo['branch'])
     if not personalinfo['branch']:
         st.caption("Please Enter Branch")
         personalinfo['valid_input'] = False
-
+        incomplete_field.append("Branch")
+    st.markdown("")
+    st.markdown("")
     personalinfo['Year of Study'] = st.selectbox("Year of Stuy",
                                                  options=['1st Year',
                                                           '2nd Year',
@@ -112,13 +142,15 @@ if st.session_state['page'] == 0:
                                                           '4th Year',
                                                           '5th Year'],
                                                           index=0,disabled=DISABLED)
+    st.markdown("")
+    st.markdown("")
     FINAL_SUBMIT.append(personalinfo['Year of Study'])
 
-    if not personalinfo['valid_input']:
+    if False:
         st.markdown("#### :red[Please Complete Personal Details to Proceed]")
     else:
 
-        st.subheader(":two: Goodness Passion Ignorance")
+        st.subheader("Goodness Passion Ignorance")
 
         if 'questions' not in st.session_state:
             question_data = pd.read_excel('./question.xlsx',sheet_name='Sheet1')
@@ -167,12 +199,29 @@ if st.session_state['page'] == 0:
         
         st.markdown("##### :blue[I Would Like to Attend Such Discussions in Future]")
         interest = st.radio("asdf",
-                            options=['Yes Definitely',
-                                     'I May',
+                            options=['Yes, Eagerly Looking for It',
+                                     'Yes, sometimes',
+                                     'Maybe, Need to think',
+                                     'Other'
                                      ],
-                                     label_visibility='hidden')
-        FINAL_SUBMIT.append(interest)
-        
+                                     label_visibility='hidden',
+                                     disabled=DISABLED)
+        if interest =='Other':
+            interest = st.text_input("Please Mention",disabled=DISABLED)
+            if not interest:
+                incomplete_field.append("I Would Like to ...")
+            FINAL_SUBMIT.append(interest)
+        else :
+            FINAL_SUBMIT.append(interest)
+
+        st.markdown("##### :blue[Please Share Your Comments/Appreciations/Suggestions] :orange[Can also mention striking points you learnt today]")
+        comments=st.text_area(":blue[Please give if any comments/appreciations/suggestions regarding session. :orange[Also can share striking points you learnt today]]",
+                     height=180
+                     ,disabled=DISABLED,
+                     label_visibility='hidden')
+        if not comments:
+            comments = "No Comments"
+        FINAL_SUBMIT.append(comments)
         
         
         # st.write(FINAL_SUBMIT)
@@ -182,14 +231,22 @@ if st.session_state['page'] == 0:
             if result =='success':
                 st.session_state['form_submitted'] = True
         if 'form_submitted' not in st.session_state:
+            if incomplete_field:
+                st.divider()
+                st.error("Please Complete These Fields to Continue")
+                # st.caption("Incomplete Fields")
+                for i in incomplete_field:
+                    st.markdown(f':green[{i}]')
             if not_answered:
                 st.divider()
                 st.error("Please Answer All the Questions to Evaluate")
                 st.markdown(f"##### :blue[You have Not Answered for Following :orange[{len(not_answered)}] Questions]")
                 st.caption("Question Numbers")
-                for i in not_answered:
-                    st.write(i)
-            else:
+                st.caption('-----'.join([str(i) for i in not_answered]))
+                # for i in not_answered:
+                #     st.write(i)
+
+            elif (not incomplete_field) and (not not_answered):
                 st.button("Evaluate my Scores",on_click=form_submit,
                     args=[FINAL_SUBMIT])
 
