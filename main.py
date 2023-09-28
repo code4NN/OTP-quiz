@@ -229,6 +229,13 @@ if st.session_state['page'] == 0:
         
         
         # st.write(FINAL_SUBMIT)
+        total_length = len(user_answer)
+        goodness_component = user_answer.count('g')/total_length
+        passion_component = user_answer.count('p')/total_length
+        ignorance_component = user_answer.count('i')/total_length
+        notsure_component = user_answer.count('n')/total_length
+
+        FINAL_SUBMIT.append(f"{goodness_component}-{passion_component}-{ignorance_component}")
 
         def form_submit(responses):
             result = append_data(FINAL_SUBMIT)
@@ -254,11 +261,6 @@ if st.session_state['page'] == 0:
                 st.button("Evaluate my Scores",on_click=form_submit,
                     args=[FINAL_SUBMIT])
 
-        total_length = len(user_answer)
-        goodness_component = user_answer.count('g')/total_length
-        passion_component = user_answer.count('p')/total_length
-        ignorance_component = user_answer.count('i')/total_length
-        notsure_component = user_answer.count('n')/total_length
 
         
         st.divider()
