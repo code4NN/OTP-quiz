@@ -183,6 +183,7 @@ if st.session_state['page'] == 0:
                             index=3,
                             label_visibility='hidden',
                             disabled=DISABLED)
+            st.divider()
             if answer == item['goodness']:
                 user_answer += 'g'
             elif answer == item['passion']:

@@ -17,7 +17,7 @@ def get_google_credential():
     gc = gspread.authorize(ServiceAccountCredentials.from_json_keyfile_dict(credentials_info,SCOPE))
     workbook = gc.open_by_key(sheetid)
     worksheet = workbook.worksheet(RESPONSE)
-    
+
     return worksheet
 
 def append_data(array_data):
@@ -26,7 +26,6 @@ def append_data(array_data):
         worksheet.append_rows(  values=[array_data],
                             value_input_option='USER_ENTERED',
                             table_range='A:Z')
-        st.header("From Method 1")
         return 'success'
     except Exception as e:
         try:
@@ -36,7 +35,6 @@ def append_data(array_data):
             worksheet.append_rows(  values=[array_data],
                                 value_input_option='USER_ENTERED',
                                 table_range='A:Z')
-            st.header("From Method 2")
             return 'success'
         except Exception as e:
             return 'error'
