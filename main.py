@@ -263,6 +263,7 @@ if st.session_state['page'] == 0:
         st.divider()
         left,middle,right = st.columns(3)
         if 'form_submitted' in st.session_state:
+            st.header("Components of your personality")
             with left:
                 st.markdown("#### Goodness")
                 st.metric("",f'{goodness_component:.2%}')
