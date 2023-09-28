@@ -10,16 +10,16 @@ st.set_page_config(page_title="GPI Test",
                    page_icon="🧪",
                    layout="centered")
 
-# st.markdown("""<style>[data-testid="stHeader"]{
-#             display:none
-#                 }
-#             footer{
-#             display:none
-#             }
-#             a[href="https://streamlit.io/cloud"]{
-#             display:none
-#             }
-#             </style>""",unsafe_allow_html=True)
+st.markdown("""<style>[data-testid="stHeader"]{
+            display:none
+                }
+            footer{
+            display:none
+            }
+            a[href="https://streamlit.io/cloud"]{
+            display:none
+            }
+            </style>""",unsafe_allow_html=True)
 
 
 if 'page' not in st.session_state:
