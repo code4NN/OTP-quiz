@@ -10,16 +10,16 @@ st.set_page_config(page_title="GPI Test",
                    page_icon="🧪",
                    layout="centered")
 
-st.markdown("""<style>[data-testid="stHeader"]{
-            display:none
-                }
-            footer{
-            display:none
-            }
-            a[href="https://streamlit.io/cloud"]{
-            display:none
-            }
-            </style>""",unsafe_allow_html=True)
+# st.markdown("""<style>[data-testid="stHeader"]{
+#             display:none
+#                 }
+#             footer{
+#             display:none
+#             }
+#             a[href="https://streamlit.io/cloud"]{
+#             display:none
+#             }
+#             </style>""",unsafe_allow_html=True)
 
 
 if 'page' not in st.session_state:
@@ -67,7 +67,10 @@ if st.session_state['page'] == 0:
     personalinfo = {'valid_input':True}
     incomplete_field = []
     FINAL_SUBMIT = []
-    
+    st.markdown(
+            '<div id="incomplete-1" style="height: 0;"></div>',
+            unsafe_allow_html=True,
+        )
     personalinfo['name'] = st.text_input("Name",disabled=DISABLED)
     FINAL_SUBMIT.append(personalinfo['name'])
     if not personalinfo['name']:
@@ -233,7 +236,7 @@ if st.session_state['page'] == 0:
         if 'form_submitted' not in st.session_state:
             if incomplete_field:
                 st.divider()
-                st.error("Please Complete These Fields to Continue")
+                st.markdown(":red[Please Complete These Fields[Click To Scroll](#incomplete-1) to Continue]")
                 # st.caption("Incomplete Fields")
                 for i in incomplete_field:
                     st.markdown(f':green[{i}]')
