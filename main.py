@@ -10,6 +10,15 @@ st.set_page_config(page_title="GPI Test",
                    page_icon="🧪",
                    layout="centered")
 
+st.markdown("""<style>[data-testid="stHeader"]{
+            display:none
+                }
+            footer{
+            display:none
+            }
+            </style>""",unsafe_allow_html=True)
+
+
 if 'page' not in st.session_state:
     st.session_state['page'] = 0
 
@@ -133,7 +142,7 @@ if st.session_state['page'] == 0:
                     options=[
                             *item['options'],
                             ""],
-                            index=1,
+                            index=3,
                             label_visibility='hidden',
                             disabled=DISABLED)
             if answer == item['goodness']:
