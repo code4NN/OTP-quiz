@@ -16,6 +16,9 @@ st.markdown("""<style>[data-testid="stHeader"]{
             footer{
             display:none
             }
+            a[href="https://streamlit.io/cloud"]{
+            display:none
+            }
             </style>""",unsafe_allow_html=True)
 
 
