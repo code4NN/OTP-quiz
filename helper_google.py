@@ -16,6 +16,10 @@ def append_data(array_data):
     gc = gspread.authorize(ServiceAccountCredentials.from_json_keyfile_dict(credentials_info,SCOPE))
     workbook = gc.open_by_key(sheetid)
     worksheet = workbook.worksheet(RESPONSE)
-    worksheet.append_rows(  values=array_data,
+    try :
+        worksheet.append_rows(  values=[array_data],
                             value_input_option='USER_ENTERED',
-                            table_range='D:E')
+                            table_range='A:Z')
+        return 'success'
+    except Exception as e:
+        return 'retry'
